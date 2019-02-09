@@ -5,6 +5,10 @@
 2. For the second line, use `Hydrogen: Run and Move Down` (`Shift + Enter`).
 3. For the remaining code, highlight it with your cursor and use `Hydrogen: Run`. What is the difference between the three?
 
+Hydrogen: Run runs the indicated code, whether an individual line or a block of highlighted code. Hydrogen: Run and Move Down runs the indicated code and moves the cursor to the next line.
+
+Hydrogen is currently not cooperating with Atom on my computer (it hasn't cooperated since Fall 2018). However, I'm still able to program and execute programs via Command Prompt.
+
 ```python
 from aguaclara.play import *
 
@@ -31,40 +35,63 @@ These questions are meant to test what you've learned from the Python Basics tut
 
 1. Write a conditional statement with 3 conditions: when x is 10, when x is 1, and when x is anything other than 1 or 10. For each condition, have your code print what the value is or isn't.
 
-<!--- Fill you answer here. --->
-
-
-
+```python
+x = input('Give me a number:')
+if x == 10:
+  print("x is 10")
+elif x ==1:
+  print("x is 1")
+else:
+  print("x is neither 10 nor 1")
+```
 
 2. Write a `for` loop that takes a variable with an initial value of 0, and adds the current index to the previous value of that variable (i.e. you variable should grow in size every iteration). Perform the iteration 20 times, and have the final value be printed at the end.
 
-<!--- Fill you answer here. --->
-
-
-
-
-
-
-
-
+```python
+x = 0
+for index in range(20):
+  x+=index
+print(x)
+```
 
 3. Using the NumPy package and `unit_registry`, calculate the value of sin(4) meters, and use the sigfig function from the unit unit_registry module in aide_design to get your answer to 2 sig-figs. *(Hint: You will need to import these packages. Remember how to do that?)*
 
-<!--- Fill you answer here. --->
+```python
+import numpy as np
+import aide_design as ad
+from aide_design import utility as ut
+
+x = np.sin(4)
+x = ut.sig(x,2)
+print(x)
+
+```
 
 
 
 4. Create a `list` of length 5, and verify the length of your list. Once you've done that, turn your `list` into an `array` and apply units of meters to it. After that, create a 5x5 `array`, extract the middle row and middle column. Verify the size of your 2D `array` and apply units of liters to it.
 
-<!--- Fill you answer here. --->
+```python
+import aide_design
+from aide_design.play import*
 
+x = [1, 2, 3, 4, 5]
+print(len(x))
 
+x_array = np.array(x)
+x_arrayUnits = x_array * u.m
+print(x_array)
 
+y_array = np.array([[1,2,3,4,5],[1,2,3,4,5],[1,1,1,1,1],[1,2,3,4,5],[1,2,3,4,5]])
+y_arrayUnits = y_array * u.L
 
+print(y_array)
 
-
-
-
+print("The middle column is")
+print(y_array[:,2])
+print("The middle row is")
+print(y_array[2,:])
+```
 
 5.  One of the most famous equations for a particle diffusing through a liquid at low Reynolds Number is the Stokes-Einstein Equation where k<sub>B</sub> is the Boltzmann constant, T is the temperature in Kelvin, eta is the dynamic viscosity in kg/(m*s), and r is the particle radius. Write a function that takes a temperature in Kelvin, a particle radius in meters, and a viscosity of water to calculate the diffusion coefficient D.
 
@@ -75,18 +102,54 @@ These questions are meant to test what you've learned from the Python Basics tut
 $$ D = \frac{k_BT}{6\pi\eta r} $$
 
 ```python
+import math
 from scipy.constants import Boltzmann as kB_sc # I've imported the unitless value for kB from SciPy
 
 kB = kB_sc * u.joule / u.kelvin # I've given kB units for you in J/K; you can use the kB variable to give you Boltzmann's constant with units
 
-# Write your code here
+T = float(input("Enter a temperature in Kelvin:"))*u.kelvin
+r = float(input("Enter the particle\'s radius in meters:")) * u.m
+η = float(input("Enter the dynamic viscosity in kg/(m*s)"))*u.kg/(u.m*u.s)
+
+D = (kB * T) / (6 * r * η * math.pi )
+
+print(D)
 
 ```
 
 6. You have a pipe with a radius of 0.2 m with water flowing in it at 2 m<sup>3</sup>/s. You want to see how the Reynolds Number changes as viscosity changes due to a change in temperature from 0 to 200<sup>o</sup>C. Create a plot of Reynolds Number against Temperature in Kelvin to show a relationship. Make sure your plot has a title, labeled axes, and axes grid. You can use functions from `physchem` like `pc.re_pipe` and `pc.viscosity_kinematic`. *(Hint: Make an array of temperatures to input into the `pc.viscosity_kinematic` function)*. Make sure to save you plot to your images folder in your personal repository, and display it below using `plt.show()` and a relative file path to the image.
 
-<!--- Fill you answer here. --->
+```python
+import aide_design
+from aide_design.play import*
 
+r = 0.2 * u.m
+d = 2*r
+q = 2 * u.m**3 / u.s
+
+temp_list = np.arange(0,201,1) #Temperature range in degrees Celsius, in increments of 1, from 0 to 200
+temp_array = np.array(temp_list)
+celsius_array = temp_array
+kelvin_array = (celsius_array + 273) * u.degK
+nu = pc.viscosity_kinematic(celsius_array*u.degC)
+rey = pc.re_pipe(q,d,nu)
+rey_array = u.Quantity(np.array(rey))
+
+plt.plot(kelvin_array, rey_array, label = "Reynolds Number")
+plt.xlabel('Temperature / K')
+plt.ylabel('Reynolds Number')
+plt.title('Reynolds Number vs Temperature in Kelvins')
+plt.minorticks_on()
+plt.grid(which = 'major')
+plt.grid(which = 'minor')
+plt.legend(loc = 'lower right', ncol = 1)
+plt.tight_layout()
+plt.savefig('./Images/ReyKelvinPlot.png)
+plt.show()
+```
+
+Using a relative file path:
+![Plot of Reynolds Number vs Temperature in Kelvins](/Images/ReyKelvinPlot.png)
 
 # GitHub Basics
 Congratulations! You've completed this interactive tutorial. Now all you need to do is save your work and put it on your personal repository. Toggle the Git Tab using `Cntrl + Shift + 9`.

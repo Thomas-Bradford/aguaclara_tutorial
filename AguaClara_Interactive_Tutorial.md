@@ -1,3 +1,5 @@
+## Note: This file is the same the file "Interactive-Tutorial-3-Hydrogen.md" that's currently found in AguaClara's aguaclara-tutorial repository. 
+
 # Using Python and Running it With Hydrogen in Markdown
 
 ## Running Code With Hydrogen

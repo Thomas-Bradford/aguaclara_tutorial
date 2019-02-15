@@ -1,4 +1,4 @@
-## Note: This file is the same the file "Interactive-Tutorial-3-Hydrogen.md" that's currently found in AguaClara's aguaclara-tutorial repository. 
+## Note: This file is the same the file "Interactive-Tutorial-3-Hydrogen.md" that's currently found in AguaClara's aguaclara-tutorial repository.
 
 # Using Python and Running it With Hydrogen in Markdown
 
@@ -38,7 +38,7 @@ These questions are meant to test what you've learned from the Python Basics tut
 1. Write a conditional statement with 3 conditions: when x is 10, when x is 1, and when x is anything other than 1 or 10. For each condition, have your code print what the value is or isn't.
 
 ```python
-x = input('Give me a number:')
+x = float(input('Give me a number:'))
 if x == 10:
   print("x is 10")
 elif x ==1:
@@ -105,25 +105,27 @@ $$ D = \frac{k_BT}{6\pi\eta r} $$
 
 ```python
 import math
+import aguaclara
+from aguaclara.play import *
 from scipy.constants import Boltzmann as kB_sc # I've imported the unitless value for kB from SciPy
 
 kB = kB_sc * u.joule / u.kelvin # I've given kB units for you in J/K; you can use the kB variable to give you Boltzmann's constant with units
 
 T = float(input("Enter a temperature in Kelvin:"))*u.kelvin
 r = float(input("Enter the particle\'s radius in meters:")) * u.m
-η = float(input("Enter the dynamic viscosity in kg/(m*s)"))*u.kg/(u.m*u.s)
+η = float(input("Enter the dynamic viscosity in kg/(m*s):"))*u.kg/(u.m*u.s)
 
 D = (kB * T) / (6 * r * η * math.pi )
 
 print(D)
+
 
 ```
 
 6. You have a pipe with a radius of 0.2 m with water flowing in it at 2 m<sup>3</sup>/s. You want to see how the Reynolds Number changes as viscosity changes due to a change in temperature from 0 to 200<sup>o</sup>C. Create a plot of Reynolds Number against Temperature in Kelvin to show a relationship. Make sure your plot has a title, labeled axes, and axes grid. You can use functions from `physchem` like `pc.re_pipe` and `pc.viscosity_kinematic`. *(Hint: Make an array of temperatures to input into the `pc.viscosity_kinematic` function)*. Make sure to save you plot to your images folder in your personal repository, and display it below using `plt.show()` and a relative file path to the image.
 
 ```python
-import aide_design
-from aide_design.play import*
+from aguaclara.play import *
 
 r = 0.2 * u.m
 d = 2*r
@@ -146,8 +148,9 @@ plt.grid(which = 'major')
 plt.grid(which = 'minor')
 plt.legend(loc = 'lower right', ncol = 1)
 plt.tight_layout()
-plt.savefig('./Images/ReyKelvinPlot.png)
+plt.savefig('./Images/ReyKelvinPlot.png')
 plt.show()
+
 ```
 
 Using a relative file path:
